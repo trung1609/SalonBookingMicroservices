@@ -2,6 +2,7 @@ package com.trung.controller;
 
 import com.trung.modal.entity.User;
 import com.trung.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/api/users")
-    public User createUser(@RequestBody User user){
+    public User createUser(@Valid @RequestBody User user){
         return userRepository.save(user);
     }
 
