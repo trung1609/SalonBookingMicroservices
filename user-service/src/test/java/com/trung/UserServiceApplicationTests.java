@@ -1,4 +1,4 @@
-package com.trung.user.service;
+package com.trung;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
