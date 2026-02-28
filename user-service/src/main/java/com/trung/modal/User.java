@@ -1,4 +1,4 @@
-package com.trung.modal.entity;
+package com.trung.modal;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

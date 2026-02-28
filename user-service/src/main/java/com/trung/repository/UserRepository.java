@@ -1,6 +1,6 @@
 package com.trung.repository;
 
-import com.trung.modal.entity.User;
+import com.trung.modal.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
