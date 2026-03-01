@@ -1,5 +1,6 @@
 package com.trung.modal;
 
+import com.trung.payload.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
