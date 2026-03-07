@@ -1,6 +1,6 @@
 package com.trung.mapper;
 
-import com.trung.modal.Salon;
+import com.trung.model.Salon;
 import com.trung.payload.dto.SalonDTO;
 
 public class SalonMapper {

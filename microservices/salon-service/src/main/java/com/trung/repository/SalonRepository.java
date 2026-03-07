@@ -1,6 +1,6 @@
 package com.trung.repository;
 
-import com.trung.modal.Salon;
+import com.trung.model.Salon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

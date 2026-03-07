@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDTO {
-
+public class UserDTO {
     private Long id;
-    private String name;
-    private String image;
+    private String fullName;
+    private String email;
+
 }

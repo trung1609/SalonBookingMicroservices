@@ -1,4 +1,4 @@
-package com.trung.modal;
+package com.trung.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
