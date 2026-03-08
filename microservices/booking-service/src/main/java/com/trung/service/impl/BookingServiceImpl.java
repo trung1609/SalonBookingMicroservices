@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime bookingStartTime = booking.getStartTime();
         LocalDateTime bookingEndTime = bookingStartTime.plusMinutes(totalDuration);
 
-        Boolean isSlotAvailable = isTimeSlotAvailable(salonDTO, bookingStartTime, bookingEndTime);
+        Boolean isSlotAvailable =  isTimeSlotAvailable(salonDTO, bookingStartTime, bookingEndTime);
         int totalPrice = servicesDTO.stream()
                 .mapToInt(ServiceDTO::getPrice)
                 .sum();
@@ -64,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
 
         LocalDateTime salonOpenTime = salonDTO.getOpenTime().atDate(bookingStartTime.toLocalDate());
         LocalDateTime salonCloseTime = salonDTO.getCloseTime().atDate(bookingStartTime.toLocalDate());
-        if (bookingStartTime.isBefore(salonOpenTime) || bookingEndTime.isAfter(salonCloseTime)) {
+        if (bookingStartTime.isBefore(salonOpenTime) && bookingEndTime.isAfter(salonCloseTime)) {
             throw new Exception("Booking time must be within salon's working hours");
         }
         for (Booking existingBooking : existingBookings) {
@@ -76,8 +76,9 @@ public class BookingServiceImpl implements BookingService {
             if (bookingStartTime.isEqual(existingBookingStartTime) || bookingEndTime.isEqual(existingBookingEndTime)) {
                 throw new Exception("Slot not available. Please choose different time.");
             }
-
         }
+
+
 
         return true;
     }
