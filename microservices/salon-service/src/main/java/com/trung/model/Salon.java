@@ -1,10 +1,8 @@
-package com.trung.modal;
+package com.trung.model;
 
-import com.trung.payload.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 

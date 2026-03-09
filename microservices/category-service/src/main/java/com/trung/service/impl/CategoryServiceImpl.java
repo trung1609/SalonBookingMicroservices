@@ -1,6 +1,6 @@
 package com.trung.service.impl;
 
-import com.trung.modal.Category;
+import com.trung.model.Category;
 import com.trung.payload.dto.SalonDTO;
 import com.trung.repository.CategoryRepository;
 import com.trung.service.CategoryService;

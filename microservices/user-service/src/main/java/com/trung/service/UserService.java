@@ -1,7 +1,7 @@
 package com.trung.service;
 
 import com.trung.exception.UserException;
-import com.trung.modal.User;
+import com.trung.model.User;
 
 import java.util.List;
 

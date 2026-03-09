@@ -1,6 +1,6 @@
 package com.trung.service;
 
-import com.trung.modal.Category;
+import com.trung.model.Category;
 import com.trung.payload.dto.SalonDTO;
 
 import java.util.Set;

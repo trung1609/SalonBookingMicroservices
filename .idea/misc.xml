@@ -9,6 +9,10 @@
         <option value="$PROJECT_DIR$/microservices/salon-service/pom.xml" />
         <option value="$PROJECT_DIR$/microservices/service-offering/pom.xml" />
         <option value="$PROJECT_DIR$/microservices/user-service/pom.xml" />
+<<<<<<< HEAD
+=======
+        <option value="$PROJECT_DIR$/microservices/booking-service/pom.xml" />
+>>>>>>> d02dc9e511e19364efc5220b7e29ceeeff10da86
       </list>
     </option>
   </component>

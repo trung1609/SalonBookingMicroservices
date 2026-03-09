@@ -1,8 +1,6 @@
 package com.trung.controller;
 
-import com.trung.exception.UserException;
-import com.trung.modal.User;
-import com.trung.repository.UserRepository;
+import com.trung.model.User;
 import com.trung.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {

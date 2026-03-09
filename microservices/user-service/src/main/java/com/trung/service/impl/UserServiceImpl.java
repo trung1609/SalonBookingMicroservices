@@ -1,7 +1,7 @@
 package com.trung.service.impl;
 
 import com.trung.exception.UserException;
-import com.trung.modal.User;
+import com.trung.model.User;
 import com.trung.repository.UserRepository;
 import com.trung.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
