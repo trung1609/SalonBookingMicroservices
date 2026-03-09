@@ -1,0 +1,41 @@
+package com.trung.model;
+
+import com.trung.domain.PaymentMethod;
+import com.trung.domain.PaymentOrderStatus;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class PaymentOrder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Long amount;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PaymentOrderStatus status = PaymentOrderStatus.PENDING;
+
+    @Column(nullable = false)
+    private PaymentMethod paymentMethod;
+
+    private String paymentLinkId;
+
+    @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
+    private Long bookingId;
+
+    @Column(nullable = false)
+    private Long salonId;
+}
