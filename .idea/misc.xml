@@ -12,7 +12,11 @@
 <<<<<<< HEAD
 =======
         <option value="$PROJECT_DIR$/microservices/booking-service/pom.xml" />
+<<<<<<< HEAD
 >>>>>>> d02dc9e511e19364efc5220b7e29ceeeff10da86
+=======
+        <option value="$PROJECT_DIR$/microservices/payment-service/pom.xml" />
+>>>>>>> fba22012ae9edda5ee197ebe687c30fd67105955
       </list>
     </option>
   </component>
