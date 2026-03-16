@@ -24,5 +24,5 @@ public class BookingDTO {
 
     private Set<Long> serviceIds;
 
-    private int totalPrice;
+    private Integer totalPrice;
 }

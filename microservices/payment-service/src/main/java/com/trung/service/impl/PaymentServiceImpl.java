@@ -1,9 +1,15 @@
 package com.trung.service.impl;
 
+import com.razorpay.Payment;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
 import com.trung.domain.PaymentMethod;
+import com.trung.domain.PaymentOrderStatus;
 import com.trung.model.PaymentOrder;
 import com.trung.payload.dto.BookingDTO;
 import com.trung.payload.dto.UserDTO;
@@ -21,27 +27,27 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    @Value( "${razorpay.api-key}")
+    @Value("${razorpay.api.key}")
     private String razorpayApiKey;
 
-    @Value( "${razorpay.secret-key}")
+    @Value("${razorpay.api.secret}")
     private String razorpaySecretKey;
 
-    @Value( "${stripe.secret-key}")
+    @Value("${stripe.api.secret}")
     private String stripeSecretKey;
 
     @Override
-    public PaymentLinkResponse createOrder(UserDTO userDTO, BookingDTO bookingDTO, PaymentMethod paymentMethod) throws RazorpayException {
-        Long amount = (long)bookingDTO.getTotalPrice();
+    public PaymentLinkResponse createOrder(UserDTO userDTO, BookingDTO bookingDTO, PaymentMethod paymentMethod) throws RazorpayException, StripeException {
+        Long amount = (long) bookingDTO.getTotalPrice();
         PaymentOrder paymentOrder = new PaymentOrder();
         paymentOrder.setAmount(amount);
         paymentOrder.setPaymentMethod(paymentMethod);
         paymentOrder.setBookingId(bookingDTO.getId());
         paymentOrder.setSalonId(bookingDTO.getSalonId());
-        PaymentOrder savedOrder =  paymentRepository.save(paymentOrder);
+        PaymentOrder savedOrder = paymentRepository.save(paymentOrder);
 
         PaymentLinkResponse paymentLinkResponse = new PaymentLinkResponse();
-        if (paymentMethod.equals(PaymentMethod.RAZORPAY)){
+        if (paymentMethod.equals(PaymentMethod.RAZORPAY)) {
             PaymentLink paymentLink = createRazorpayPaymentLink(userDTO,
                     savedOrder.getAmount(),
                     savedOrder.getId());
@@ -54,14 +60,20 @@ public class PaymentServiceImpl implements PaymentService {
 
             savedOrder.setPaymentLinkId(paymentUrlId);
             paymentRepository.save(savedOrder);
-        }
-        else {
-            String paymentUrl = createStripePaymentLink(
+        } else {
+            String[] stripePaymentData = createStripePaymentLink(
                     userDTO,
                     savedOrder.getAmount(),
                     savedOrder.getId()
             );
+            String paymentUrl = stripePaymentData[0];
+            String paymentLinkId = stripePaymentData[1];
+            
             paymentLinkResponse.setPaymentLinkUrl(paymentUrl);
+            paymentLinkResponse.setPaymentLinkId(paymentLinkId);
+            
+            savedOrder.setPaymentLinkId(paymentLinkId);
+            paymentRepository.save(savedOrder);
         }
         return paymentLinkResponse;
     }
@@ -69,7 +81,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentOrder getPaymentOrderById(Long id) throws Exception {
         PaymentOrder paymentOrder = paymentRepository.findById(id).orElse(null);
-        if (paymentOrder == null){
+        if (paymentOrder == null) {
             throw new Exception("Payment order not found with id: " + id);
         }
 
@@ -100,7 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         paymentLinkRequest.put("reminder_enable", true);
 
-        paymentLinkRequest.put("callback_url", "http://localhost:3000/payment-success/"+orderId);
+        paymentLinkRequest.put("callback_url", "http://localhost:3000/payment-success/" + orderId);
 
         paymentLinkRequest.put("callback_method", "get");
 
@@ -108,7 +120,55 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public String createStripePaymentLink(UserDTO userDTO, Long amount, Long orderId) {
-        return "";
+    public String[] createStripePaymentLink(UserDTO userDTO, Long amount, Long orderId) throws StripeException {
+        Stripe.apiKey = stripeSecretKey;
+        SessionCreateParams params = SessionCreateParams.builder()
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl("http://localhost:3000/payment-success/" + orderId)
+                .setCancelUrl("http://localhost:3000/payment-cancel")
+                .addLineItem(SessionCreateParams.LineItem.builder()
+                        .setQuantity(1L)
+                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
+                                .setCurrency("usd")
+                                .setUnitAmount(amount * 100)
+                                .setProductData(SessionCreateParams
+                                        .LineItem
+                                        .PriceData
+                                        .ProductData
+                                        .builder().setName("Salon Appointment Booking")
+                                        .build())
+                                .build())
+                        .build()
+                )
+                .build();
+
+        Session session = Session.create(params);
+        return new String[]{session.getUrl(), session.getId()};
+    }
+
+    @Override
+    public Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException {
+        if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)){
+            if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)){
+                RazorpayClient razorpayClient = new RazorpayClient(razorpayApiKey, razorpaySecretKey);
+
+                Payment payment = razorpayClient.payments.fetch(paymentId);
+                Integer amount = payment.get("amount");
+                String status = payment.get("status");
+                if (status.equals("captured")){
+                    // produce kafka event
+                    paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                    paymentRepository.save(paymentOrder);
+                    return true;
+                }
+                return false;
+            }else {
+                paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                paymentRepository.save(paymentOrder);
+                return true;
+            }
+        }
+        return false;
     }
 }
