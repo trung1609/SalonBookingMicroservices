@@ -7,6 +7,7 @@ import com.trung.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+        newUser.setFullName(user.getFullName());
+        newUser.setEmail(user.getEmail());
+        newUser.setPhone(user.getPhone());
+        newUser.setRole(user.getRole());
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+        newUser.setCreatedAt(LocalDateTime.now());
+        return userRepository.save(newUser);
     }
 
     @Override

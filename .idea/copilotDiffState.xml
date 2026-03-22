@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/microservices/booking-service/src/main/java/com/trung/client/SalonClient.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/microservices/booking-service/src/main/java/com/trung/client/SalonClient.java" />
+              <option name="updatedContent" value="package com.trung.client;&#10;&#10;import com.trung.dto.SalonDTO;&#10;import org.springframework.beans.factory.annotation.Autowired;&#10;import org.springframework.stereotype.Component;&#10;import org.springframework.web.client.RestTemplate;&#10;&#10;@Component&#10;public class SalonClient {&#10;    @Autowired&#10;    private RestTemplate restTemplate;&#10;&#10;    private static final String SALON_SERVICE_URL = &quot;http://SALON-SERVICE/api/salons&quot;;&#10;&#10;    public SalonDTO getSalonById(Long salonId) throws Exception {&#10;        try {&#10;            SalonDTO salon = restTemplate.getForObject(SALON_SERVICE_URL + &quot;/&quot; + salonId, SalonDTO.class);&#10;            if (salon == null) {&#10;                throw new Exception(&quot;Salon not found with id: &quot; + salonId);&#10;            }&#10;            return salon;&#10;        } catch (Exception e) {&#10;            throw new Exception(&quot;Failed to fetch salon data: &quot; + e.getMessage());&#10;        }&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/microservices/booking-service/src/main/java/com/trung/client/ServiceClient.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/microservices/booking-service/src/main/java/com/trung/client/ServiceClient.java" />
+              <option name="updatedContent" value="package com.trung.client;&#10;&#10;import com.trung.dto.ServiceDTO;&#10;import org.springframework.beans.factory.annotation.Autowired;&#10;import org.springframework.stereotype.Component;&#10;import org.springframework.web.client.RestTemplate;&#10;&#10;import java.util.Arrays;&#10;import java.util.HashSet;&#10;import java.util.Set;&#10;&#10;@Component&#10;public class ServiceClient {&#10;    @Autowired&#10;    private RestTemplate restTemplate;&#10;&#10;    private static final String SERVICE_OFFERING_URL = &quot;http://SERVICE-OFFERING/api/service-offering&quot;;&#10;&#10;    public Set&lt;ServiceDTO&gt; getServicesByIds(Set&lt;Long&gt; serviceIds) throws Exception {&#10;        try {&#10;            Set&lt;ServiceDTO&gt; services = new HashSet&lt;&gt;();&#10;            for (Long serviceId : serviceIds) {&#10;                ServiceDTO service = restTemplate.getForObject(SERVICE_OFFERING_URL + &quot;/&quot; + serviceId, ServiceDTO.class);&#10;                if (service != null) {&#10;                    services.add(service);&#10;                }&#10;            }&#10;            return services;&#10;        } catch (Exception e) {&#10;            throw new Exception(&quot;Failed to fetch service data: &quot; + e.getMessage());&#10;        }&#10;    }&#10;&#10;    public ServiceDTO getServiceById(Long serviceId) throws Exception {&#10;        try {&#10;            ServiceDTO service = restTemplate.getForObject(SERVICE_OFFERING_URL + &quot;/&quot; + serviceId, ServiceDTO.class);&#10;            if (service == null) {&#10;                throw new Exception(&quot;Service not found with id: &quot; + serviceId);&#10;            }&#10;            return service;&#10;        } catch (Exception e) {&#10;            throw new Exception(&quot;Failed to fetch service data: &quot; + e.getMessage());&#10;        }&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/microservices/booking-service/src/main/java/com/trung/config/RestTemplateConfig.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/microservices/booking-service/src/main/java/com/trung/config/RestTemplateConfig.java" />
+              <option name="updatedContent" value="package com.trung.config;&#10;&#10;import org.springframework.cloud.client.loadbalancer.LoadBalanced;&#10;import org.springframework.context.annotation.Bean;&#10;import org.springframework.context.annotation.Configuration;&#10;import org.springframework.web.client.RestTemplate;&#10;&#10;@Configuration&#10;public class RestTemplateConfig {&#10;    &#10;    @Bean&#10;    @LoadBalanced&#10;    public RestTemplate restTemplate() {&#10;        return new RestTemplate();&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

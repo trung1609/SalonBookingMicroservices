@@ -28,6 +28,9 @@ public class PaymentController {
         userDTO.setEmail("trung@gmail.com");
         userDTO.setId(1L);
 
+        bookingDTO.setId(1L);
+        bookingDTO.setSalonId(1L);
+        bookingDTO.setCustomerId(1L);
         PaymentLinkResponse response = paymentService.createOrder(userDTO, bookingDTO, paymentMethod);
 
         return ResponseEntity.ok(response);
