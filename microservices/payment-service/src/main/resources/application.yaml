@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment_service_db_salon_booking
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  port: 8085
+
+razorpay:
+  api:
+    key: rzp_test_us_SP5Kr0YDhq4l4x
+    secret: 662aR6SMiyni7YIhdwYlt8RW
+
+stripe:
+  api:
+    key: pk_test_51T90Y8GVJ3P1R0kJJg32ywoZNlLEGfk3e2JB7B2P5aVy0e9KmBZBOK5VUJlvwABem2rkXKhDYgouHeBXgzDeHWAJ00oLXXq8Ux
+    secret: sk_test_51T90Y8GVJ3P1R0kJGTlcoy7Szt81k9Y6fkbCNEgnPU8y7XjA6j9bayTZBoMA2wlRDC80NkS5hfLk0uZrSiPaw76N00EuEA4M14
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8086/eureka/
