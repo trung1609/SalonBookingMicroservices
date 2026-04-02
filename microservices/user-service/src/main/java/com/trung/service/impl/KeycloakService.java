@@ -21,12 +21,12 @@ public class KeycloakService {
     private static final String KEYCLOAK_ADMIN_API = KEYCLOAK_BASE_URL + "/admin/realms/master/users";
     private static final String TOKEN_URL = KEYCLOAK_BASE_URL + "/realms/master/protocol/openid-connect/token";
     private static final String CLIENT_ID = "salon-booking-client";
-    private static final String CLIENT_SECRET = "dzBHjfyG0QkIvJhnvoZZgQXVNHTXUPYn";
+    private static final String CLIENT_SECRET = "zYpserXEpMh3497hnoejnIS1xFfavogb";
     private static final String GRANT_TYPE = "password";
     private static final String scope = "openid profile email";
-    private static final String username = "trungadmin";
+    private static final String username = "trung";
     private static final String password = "123456";
-    private static final String clientId = "ec67d59b-323c-444b-b08e-ee237819bdd1";
+    private static final String clientId = "95e3fda7-8a45-42fb-9ccb-b97150b859f8";
 
     private final RestTemplate restTemplate;
 
@@ -185,6 +185,28 @@ public class KeycloakService {
             );
         } catch (Exception e) {
             throw new Exception("Failed to assign role to user: " + e.getMessage());
+        }
+    }
+
+    public KeycloakUserDTO fetchUserProfileByJwt(String token) throws Exception {
+        String url = KEYCLOAK_BASE_URL + "/realms/master/protocol/openid-connect/userinfo";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> requestEntity =
+                new HttpEntity<>(headers);
+        try {
+            ResponseEntity<KeycloakUserDTO> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    requestEntity,
+                    KeycloakUserDTO.class
+            );
+            return response.getBody();
+        } catch (Exception e) {
+            throw new Exception("Failed to fetch user profile: " + e.getMessage());
         }
     }
 }

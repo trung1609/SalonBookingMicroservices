@@ -2,6 +2,7 @@ package com.trung.service.impl;
 
 import com.trung.exception.UserException;
 import com.trung.model.User;
+import com.trung.payload.dto.KeycloakUserDTO;
 import com.trung.repository.UserRepository;
 import com.trung.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private KeycloakService keycloakService;
 
     @Override
     public User createUser(User user) {
@@ -68,5 +71,11 @@ public class UserServiceImpl implements UserService {
         existingUser.setPassword(user.getPassword());
 
         return userRepository.save(existingUser);
+    }
+
+    @Override
+    public User getUserFromJwt(String jwt) throws Exception {
+        KeycloakUserDTO keycloakUserDTO = keycloakService.fetchUserProfileByJwt(jwt);
+        return userRepository.findByEmail(keycloakUserDTO.getEmail());
     }
 }

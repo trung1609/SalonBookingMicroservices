@@ -18,13 +18,13 @@ public class UserController {
 
 
     @PostMapping("/api/users")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/api/users")
-    public ResponseEntity<List<User>> getUser(){
+    public ResponseEntity<List<User>> getUser() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -42,5 +42,11 @@ public class UserController {
     public ResponseEntity<String> deleteUserById(@PathVariable Long id) throws Exception {
         userService.deleteUserById(id);
         return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/api/users/profile")
+    public ResponseEntity<User> getUserFromJwt(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.getUserFromJwt(jwt);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
