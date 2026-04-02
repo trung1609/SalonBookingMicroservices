@@ -1,6 +1,7 @@
 package com.trung.service.impl;
 
 import com.trung.payload.dto.*;
+import com.trung.payload.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -45,9 +46,9 @@ public class KeycloakService {
         UserRequest userRequest = new UserRequest();
         userRequest.setUsername(signupDTO.getUsername());
         userRequest.setEmail(signupDTO.getEmail());
-        userRequest.setFirstName(signupDTO.getFirstName());
-        userRequest.setLastName(signupDTO.getLastName());
+        userRequest.setLastName(signupDTO.getFullName());
         userRequest.setEnabled(true);
+        userRequest.getCredentials().add(credential);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -90,7 +91,7 @@ public class KeycloakService {
                                              String refreshToken) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", grantType);

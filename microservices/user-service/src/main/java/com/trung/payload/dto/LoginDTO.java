@@ -1,19 +1,15 @@
 package com.trung.payload.dto;
 
-import com.trung.domain.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class SignupDTO {
-    private String fullName;
+@AllArgsConstructor
+@NoArgsConstructor
+public class LoginDTO {
     private String email;
     private String password;
-    private String username;
-    private UserRole role;
 }

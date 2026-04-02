@@ -1,4 +1,4 @@
-package com.trung.payload.dto;
+package com.trung.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
