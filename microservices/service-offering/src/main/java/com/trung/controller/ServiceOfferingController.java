@@ -2,6 +2,7 @@ package com.trung.controller;
 
 import com.trung.model.ServiceOffering;
 import com.trung.service.ServiceOfferingService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +11,10 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/service-offering")
+@RequiredArgsConstructor
 public class ServiceOfferingController {
 
-    @Autowired
-    private ServiceOfferingService serviceOfferingService;
+    private final ServiceOfferingService serviceOfferingService;
 
 
     @GetMapping("/salon/{salonId}")
