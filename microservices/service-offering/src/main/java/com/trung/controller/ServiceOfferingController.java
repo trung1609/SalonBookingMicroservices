@@ -32,7 +32,7 @@ public class ServiceOfferingController {
         return ResponseEntity.ok(serviceOfferings);
     }
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/list/{ids}")
     public ResponseEntity<Set<ServiceOffering>> getServicesByIds(
             @PathVariable Set<Long> ids) {
         Set<ServiceOffering> serviceOfferings = serviceOfferingService.getServicesByIds(ids);

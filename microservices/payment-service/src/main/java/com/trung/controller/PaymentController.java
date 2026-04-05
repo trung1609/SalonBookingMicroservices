@@ -1,36 +1,32 @@
 package com.trung.controller;
 
-import com.razorpay.RazorpayException;
-import com.stripe.exception.StripeException;
 import com.trung.domain.PaymentMethod;
 import com.trung.model.PaymentOrder;
 import com.trung.payload.dto.BookingDTO;
 import com.trung.payload.dto.UserDTO;
 import com.trung.payload.response.PaymentLinkResponse;
 import com.trung.service.PaymentService;
+import com.trung.service.client.UserFeignClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/payments")
+@RequiredArgsConstructor
 public class PaymentController {
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
+    private final UserFeignClient userFeignClient;
 
     @PostMapping("/create")
     public ResponseEntity<PaymentLinkResponse> createPaymentLink(
             @RequestBody BookingDTO bookingDTO,
-            @RequestParam PaymentMethod paymentMethod
-    ) throws StripeException, RazorpayException {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFullName("Trung");
-        userDTO.setEmail("trung@gmail.com");
-        userDTO.setId(1L);
+            @RequestParam PaymentMethod paymentMethod,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        UserDTO userDTO = userFeignClient.getUserProfile(jwt).getBody();
 
-        bookingDTO.setId(1L);
-        bookingDTO.setSalonId(1L);
-        bookingDTO.setCustomerId(1L);
         PaymentLinkResponse response = paymentService.createOrder(userDTO, bookingDTO, paymentMethod);
 
         return ResponseEntity.ok(response);

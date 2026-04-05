@@ -1,5 +1,6 @@
 package com.trung.payload.dto;
 
+import com.trung.domain.BookingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,8 @@ public class BookingDTO {
     private LocalDateTime endTime;
 
     private Set<Long> serviceIds;
+
+    private BookingStatus status = BookingStatus.PENDING;
 
     private Integer totalPrice;
 }
