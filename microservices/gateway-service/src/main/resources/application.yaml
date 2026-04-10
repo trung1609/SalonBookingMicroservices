@@ -37,6 +37,11 @@ spring:
           predicates:
             - Path=/auth/**,/api/admin/users/**,/api/users/**,/users/**
 
+        - id: NOTIFICATION-SERVICE
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/notifications/**
+
 
   security:
     oauth2:
