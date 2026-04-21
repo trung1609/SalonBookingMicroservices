@@ -7,7 +7,6 @@ import com.trung.payload.dto.UserDTO;
 import com.trung.service.SalonService;
 import com.trung.service.client.UserFeignClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

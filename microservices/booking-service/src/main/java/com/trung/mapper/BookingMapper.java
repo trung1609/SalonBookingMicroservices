@@ -4,7 +4,7 @@ import com.trung.dto.BookingDTO;
 import com.trung.model.Booking;
 
 public class BookingMapper {
-    public static BookingDTO toDTO(Booking booking){
+    public static BookingDTO toDTO(Booking booking) {
         BookingDTO bookingDTO = new BookingDTO();
         bookingDTO.setId(booking.getId());
         bookingDTO.setCustomerId(booking.getCustomerId());

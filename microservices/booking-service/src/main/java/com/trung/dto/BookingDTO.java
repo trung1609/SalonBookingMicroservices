@@ -1,7 +1,6 @@
 package com.trung.dto;
 
 import com.trung.domain.BookingStatus;
-import jakarta.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
