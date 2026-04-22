@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime bookingStartTime = booking.getStartTime();
         LocalDateTime bookingEndTime = bookingStartTime.plusMinutes(totalDuration);
 
-        Boolean isSlotAvailable =  isTimeSlotAvailable(salonDTO, bookingStartTime, bookingEndTime);
+        Boolean isSlotAvailable = isTimeSlotAvailable(salonDTO, bookingStartTime, bookingEndTime);
         int totalPrice = servicesDTO.stream()
                 .mapToInt(ServiceDTO::getPrice)
                 .sum();
@@ -77,7 +77,6 @@ public class BookingServiceImpl implements BookingService {
                 throw new Exception("Slot not available. Please choose different time.");
             }
         }
-
 
 
         return true;

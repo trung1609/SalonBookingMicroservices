@@ -39,7 +39,7 @@ public class SalonServiceImpl implements SalonService {
             throw new Exception("You don't have permission to update this salon");
         }
 
-        if(existingSalon != null){
+        if (existingSalon != null) {
             existingSalon.setAddress(salon.getAddress());
             existingSalon.setCity(salon.getCity());
             existingSalon.setEmail(salon.getEmail());
@@ -61,8 +61,8 @@ public class SalonServiceImpl implements SalonService {
 
     @Override
     public Salon getSalonById(Long salonId) throws Exception {
-        Salon salon =  salonRepository.findById(salonId).orElse(null);
-        if (salon == null){
+        Salon salon = salonRepository.findById(salonId).orElse(null);
+        if (salon == null) {
             throw new Exception("Salon not found with id: " + salonId);
         }
         return salon;

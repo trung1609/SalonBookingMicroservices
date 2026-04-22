@@ -69,10 +69,10 @@ public class PaymentServiceImpl implements PaymentService {
             );
             String paymentUrl = stripePaymentData[0];
             String paymentLinkId = stripePaymentData[1];
-            
+
             paymentLinkResponse.setPaymentLinkUrl(paymentUrl);
             paymentLinkResponse.setPaymentLinkId(paymentLinkId);
-            
+
             savedOrder.setPaymentLinkId(paymentLinkId);
             paymentRepository.save(savedOrder);
         }
@@ -150,21 +150,21 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException {
-        if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)){
-            if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)){
+        if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
+            if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)) {
                 RazorpayClient razorpayClient = new RazorpayClient(razorpayApiKey, razorpaySecretKey);
 
                 Payment payment = razorpayClient.payments.fetch(paymentId);
                 Integer amount = payment.get("amount");
                 String status = payment.get("status");
-                if (status.equals("captured")){
+                if (status.equals("captured")) {
                     // produce kafka event
                     paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
                     paymentRepository.save(paymentOrder);
                     return true;
                 }
                 return false;
-            }else {
+            } else {
                 paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
                 paymentRepository.save(paymentOrder);
                 return true;

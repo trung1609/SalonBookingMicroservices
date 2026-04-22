@@ -3,6 +3,7 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/microservices/notifications" />
+    <file type="web" url="file://$PROJECT_DIR$/microservices/review" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

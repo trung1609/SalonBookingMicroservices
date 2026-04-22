@@ -5,7 +5,7 @@ import com.trung.payload.dto.SalonDTO;
 
 public class SalonMapper {
 
-    public static SalonDTO toDTO(Salon salon){
+    public static SalonDTO toDTO(Salon salon) {
         SalonDTO salonDTO = new SalonDTO();
         salonDTO.setId(salon.getId());
         salonDTO.setName(salon.getName());

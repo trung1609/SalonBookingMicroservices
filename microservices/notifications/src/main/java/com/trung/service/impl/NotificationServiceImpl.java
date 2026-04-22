@@ -45,6 +45,6 @@ public class NotificationServiceImpl implements NotificationService {
                 notification -> {
                     notification.setIsRead(true);
                     return notificationRepository.save(notification);
-                }).orElseThrow(()-> new Exception("Notification not found with id: " + notificationId));
+                }).orElseThrow(() -> new Exception("Notification not found with id: " + notificationId));
     }
 }

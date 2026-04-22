@@ -3,7 +3,6 @@ package com.trung.controller;
 import com.trung.model.ServiceOffering;
 import com.trung.service.ServiceOfferingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

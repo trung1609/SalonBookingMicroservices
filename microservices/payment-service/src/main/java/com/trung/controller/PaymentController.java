@@ -8,7 +8,6 @@ import com.trung.payload.response.PaymentLinkResponse;
 import com.trung.service.PaymentService;
 import com.trung.service.client.UserFeignClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
