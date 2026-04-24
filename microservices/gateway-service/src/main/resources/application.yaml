@@ -42,6 +42,10 @@ spring:
           predicates:
             - Path=/api/notifications/**
 
+        - id: REVIEW
+          uri: lb://REVIEW
+          predicates:
+            - Path=/api/reviews/**
 
   security:
     oauth2:
