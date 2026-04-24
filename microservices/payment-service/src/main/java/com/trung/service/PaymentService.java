@@ -24,5 +24,5 @@ public interface PaymentService {
 
     String[] createStripePaymentLink(UserDTO userDTO, Long Amount, Long orderId) throws StripeException;
 
-    Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException;
+    Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException, StripeException;
 }

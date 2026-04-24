@@ -6,6 +6,7 @@ import com.trung.dto.SalonDTO;
 import com.trung.dto.ServiceDTO;
 import com.trung.dto.UserDTO;
 import com.trung.model.Booking;
+import com.trung.model.PaymentOrder;
 import com.trung.model.SalonReport;
 import com.trung.repository.BookingRepository;
 import com.trung.service.BookingService;
@@ -151,5 +152,12 @@ public class BookingServiceImpl implements BookingService {
         report.setTotalEarning(totalEarnings);
         report.setTotalRefund(totalRefund);
         return report;
+    }
+
+    @Override
+    public Booking bookingSuccess(PaymentOrder paymentOrder) throws Exception {
+        Booking existingBooking = getBookingById(paymentOrder.getBookingId());
+        existingBooking.setStatus(BookingStatus.CONFIRMED);
+        return bookingRepository.save(existingBooking);
     }
 }

@@ -6,6 +6,7 @@ import com.trung.dto.SalonDTO;
 import com.trung.dto.ServiceDTO;
 import com.trung.dto.UserDTO;
 import com.trung.model.Booking;
+import com.trung.model.PaymentOrder;
 import com.trung.model.SalonReport;
 
 import java.time.LocalDate;
@@ -29,4 +30,6 @@ public interface BookingService {
     List<Booking> getBookingsByDate(LocalDate date, Long salonId);
 
     SalonReport getSalonReport(Long salonId);
+
+    Booking bookingSuccess(PaymentOrder paymentOrder) throws Exception;
 }

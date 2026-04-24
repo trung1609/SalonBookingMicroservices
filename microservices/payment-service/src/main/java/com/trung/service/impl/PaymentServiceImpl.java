@@ -10,22 +10,24 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.trung.domain.PaymentMethod;
 import com.trung.domain.PaymentOrderStatus;
+import com.trung.messaging.BookingEventProducer;
+import com.trung.messaging.NotificationEventProducer;
 import com.trung.model.PaymentOrder;
 import com.trung.payload.dto.BookingDTO;
 import com.trung.payload.dto.UserDTO;
 import com.trung.payload.response.PaymentLinkResponse;
 import com.trung.repository.PaymentRepository;
 import com.trung.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
 
     @Value("${razorpay.api.key}")
     private String razorpayApiKey;
@@ -35,6 +37,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Value("${stripe.api.secret}")
     private String stripeSecretKey;
+
+    private final BookingEventProducer bookingEventProducer;
+    private final NotificationEventProducer notificationEventProducer;
 
     @Override
     public PaymentLinkResponse createOrder(UserDTO userDTO, BookingDTO bookingDTO, PaymentMethod paymentMethod) throws RazorpayException, StripeException {
@@ -96,11 +101,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentLink createRazorpayPaymentLink(UserDTO userDTO, Long Amount, Long orderId) throws RazorpayException {
-        Long amount = Amount * 100;
+//        Long amount = Amount * 100;
         RazorpayClient razorpayClient = new RazorpayClient(razorpayApiKey, razorpaySecretKey);
         JSONObject paymentLinkRequest = new JSONObject();
-        paymentLinkRequest.put("amount", amount);
-        paymentLinkRequest.put("currency", "INR");
+        paymentLinkRequest.put("amount", 100);
+        paymentLinkRequest.put("currency", "USD");
         JSONObject customer = new JSONObject();
         customer.put("name", userDTO.getFullName());
         customer.put("email", userDTO.getEmail());
@@ -149,22 +154,51 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException {
+    public Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException, StripeException {
+        if (paymentOrder == null) {
+            throw new IllegalArgumentException("Payment order cannot be null");
+        }
         if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
             if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)) {
                 RazorpayClient razorpayClient = new RazorpayClient(razorpayApiKey, razorpaySecretKey);
-
                 Payment payment = razorpayClient.payments.fetch(paymentId);
-                Integer amount = payment.get("amount");
                 String status = payment.get("status");
                 if (status.equals("captured")) {
-                    // produce kafka event
+
+                    bookingEventProducer.sentBookingUpdateEvent(paymentOrder);
+                    notificationEventProducer.sentNotification(
+                            paymentOrder.getBookingId(),
+                            paymentOrder.getUserId(),
+                            paymentOrder.getSalonId());
+
                     paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
                     paymentRepository.save(paymentOrder);
                     return true;
                 }
                 return false;
             } else {
+                // For Stripe, verify the session payment status
+                Stripe.apiKey = stripeSecretKey;
+                if (paymentLinkId != null && !paymentLinkId.isEmpty()) {
+                    try {
+                        Session session = Session.retrieve(paymentLinkId);
+                        if ("paid".equals(session.getPaymentStatus())) {
+                            bookingEventProducer.sentBookingUpdateEvent(paymentOrder);
+                            notificationEventProducer.sentNotification(
+                                    paymentOrder.getBookingId(),
+                                    paymentOrder.getUserId(),
+                                    paymentOrder.getSalonId());
+
+                            paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                            paymentRepository.save(paymentOrder);
+                            return true;
+                        }
+                        return false;
+                    } catch (StripeException e) {
+                        throw new RuntimeException("Error verifying Stripe payment: " + e.getMessage(), e);
+                    }
+                }
+                // If no session ID provided, assume payment succeeded (fallback)
                 paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
                 paymentRepository.save(paymentOrder);
                 return true;
