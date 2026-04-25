@@ -1,10 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
+import { Button } from '@mui/material';
 
 function App() {
   return (
     <div className="App">
-      Hello World
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
     </div>
   );
 }
