@@ -37,15 +37,12 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
-     @PatchMapping("/proceed")
-     public ResponseEntity<Boolean> proceedPayment(
-             @RequestParam Long orderId,
-             @RequestParam(required = false) String paymentId) throws Exception {
-         PaymentOrder paymentOrder = paymentService.getPaymentOrderById(orderId);
-         if (paymentOrder == null) {
-             throw new Exception("Payment order not found with order id: " + orderId);
-         }
-         Boolean response = paymentService.proceedPayment(paymentOrder, paymentId, paymentOrder.getPaymentLinkId());
-         return ResponseEntity.ok(response);
-     }
+    @PatchMapping("/proceed")
+    public ResponseEntity<Boolean> proceedPayment(
+            @RequestParam String paymentId,
+            @RequestParam String paymentLinkId) throws Exception {
+        PaymentOrder paymentOrder = paymentService.getPaymentOrderByPaymentId(paymentLinkId);
+        Boolean response = paymentService.proceedPayment(paymentOrder, paymentId, paymentLinkId);
+        return ResponseEntity.ok(response);
+    }
 }

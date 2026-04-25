@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.5.1'
 }
 
 group = 'com.trung'
@@ -47,4 +48,16 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jib {
+    to {
+        image = 'vmt1609/salon-review-service:v1'
+    }
+    container {
+        ports = ['8087']
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+
+        jvmFlags = ['-Xms256m', '-Xmx512m']
+    }
 }

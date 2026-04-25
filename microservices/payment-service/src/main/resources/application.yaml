@@ -26,8 +26,8 @@ server:
 
 razorpay:
   api:
-    key: rzp_test_us_SP5Kr0YDhq4l4x
-    secret: 662aR6SMiyni7YIhdwYlt8RW
+    key: rzp_test_ShYvqhXzEQ8Qag
+    secret: 0uzKIi4E4hkCw1SYmjlRtEfV
 
 stripe:
   api:

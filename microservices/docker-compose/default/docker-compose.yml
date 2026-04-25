@@ -103,6 +103,58 @@ services:
     networks:
       - vmt1609
 
+  notification_db_salon_booking:
+    image: postgres:16
+    container_name: notification_db_salon_booking
+    ports:
+      - "5438:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: notification_salon_booking
+    volumes:
+      - notification-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+    networks:
+      - vmt1609
+
+  review_db_salon_booking:
+    image: postgres:16
+    container_name: review_db_salon_booking
+    ports:
+      - "5439:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: review_db_salon_booking
+    volumes:
+      - review-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+    networks:
+      - vmt1609
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - vmt1609
+
   eurekaserver:
     image: "vmt1609/salon-eureka-server:v1"
     ports:
@@ -118,7 +170,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 700m
+          memory: 512m
     networks:
       - vmt1609
 
@@ -169,12 +221,18 @@ services:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "booking-service"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://booking_service_db_salon_booking:5432/booking_service_db_salon_booking"
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:9999/eureka/
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
     deploy:
       resources:
         limits:
@@ -227,12 +285,18 @@ services:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "payment-service"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://payment_service_db_salon_booking:5432/payment_service_db_salon_booking"
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:9999/eureka/
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
     deploy:
       resources:
         limits:
@@ -298,6 +362,70 @@ services:
     networks:
       - vmt1609
 
+  notification:
+    image: "vmt1609/salon-notification-service:v1"
+    ports:
+      - "8086:8086"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent localhost:8086/actuator/health/readiness | grep UP || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    container_name: notification
+    depends_on:
+      notification_db_salon_booking:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "notification-service"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://notification_db_salon_booking:5432/notification_salon_booking"
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:9999/eureka/
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - vmt1609
+
+  review:
+    image: "vmt1609/salon-review-service:v1"
+    ports:
+      - "8087:8087"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent localhost:8087/actuator/health/readiness | grep UP || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    container_name: review
+    depends_on:
+      review_db_salon_booking:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "review"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://review_db_salon_booking:5432/review_db_salon_booking"
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:9999/eureka/
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - vmt1609
+
   gatewayservice:
     image: "vmt1609/salon-gateway-service:v1"
     ports:
@@ -330,3 +458,6 @@ volumes:
   payment-data:
   salon-data:
   service-offer-data:
+  notification-data:
+  review-data:
+  rabbitmq-data:
