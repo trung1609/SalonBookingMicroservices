@@ -1,16 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
-import { Button, ThemeProvider } from '@mui/material';
+import {ThemeProvider} from '@mui/material';
 import greenTheme from './theme/greenTheme';
-import Home from './Customer/Home/Home';
+import SalonDetails from './Salon/Salon Details/SalonDetails';
 
 function App() {
-  return (
-    <ThemeProvider theme={greenTheme}>
-      <Home/>
-    </ThemeProvider>
+    return (
+        <ThemeProvider theme={greenTheme}>
+            {/* <Home/> */}
+            <SalonDetails/>
+        </ThemeProvider>
 
-  );
+    );
 }
 
 export default App;
