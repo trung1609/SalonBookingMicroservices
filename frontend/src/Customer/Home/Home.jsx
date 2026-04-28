@@ -2,7 +2,7 @@ import React from 'react'
 import Banner from './Banner'
 import HomeServiceCard from './HomeServiceCard'
 import {services} from '../../Data/services'
-import SalonList from '../../Salon/SalonList'
+import SalonList from '../Salon/SalonList'
 
 const Home = () => {
     return (
