@@ -24,10 +24,17 @@ spring:
 server:
   port: 8085
 
+#pc
+#razorpay:
+#  api:
+#    key: rzp_test_ShYvqhXzEQ8Qag
+#    secret: 0uzKIi4E4hkCw1SYmjlRtEfV
+
+#laptop
 razorpay:
   api:
-    key: rzp_test_ShYvqhXzEQ8Qag
-    secret: 0uzKIi4E4hkCw1SYmjlRtEfV
+    key: rzp_test_SikCuojILTxzpc
+    secret: PzRDxWvDsqD1toAZ3ZRHggRB
 
 stripe:
   api:
