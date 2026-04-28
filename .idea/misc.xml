@@ -5,6 +5,9 @@
     <file type="web" url="file://$PROJECT_DIR$/microservices/notifications" />
     <file type="web" url="file://$PROJECT_DIR$/microservices/review" />
   </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="FLOW" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
