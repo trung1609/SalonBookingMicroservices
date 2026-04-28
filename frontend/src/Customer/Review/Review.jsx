@@ -13,7 +13,7 @@ const Review = () => {
             <section className={'w-full md:w-1/2 lg:w-[60%]'}>
                 <div className={'mt-10'}>
                     <div className={'space-y-5'}>
-                        {[1,1,1,1,1,1].map((item) =><div className={'space-y-4'}>
+                        {[1, 1, 1, 1, 1, 1].map((item) => <div className={'space-y-4'}>
                             <ReviewCard/>
                             <Divider/>
                         </div>)}

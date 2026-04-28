@@ -1,13 +1,15 @@
 import './App.css';
 import {ThemeProvider} from '@mui/material';
 import greenTheme from './theme/greenTheme';
-import SalonDetails from './Salon/Salon Details/SalonDetails';
+import Notifications from "./Customer/Notification/Notifications";
 
 function App() {
     return (
         <ThemeProvider theme={greenTheme}>
             {/* <Home/> */}
-            <SalonDetails/>
+            {/*<SalonDetails/>*/}
+            {/*<Bookings/>*/}
+            <Notifications/>
         </ThemeProvider>
 
     );

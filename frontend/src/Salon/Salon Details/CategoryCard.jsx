@@ -5,8 +5,8 @@ const CategoryCard = ({handleCategoryClick, selectedCategory, item}) => {
         <div
             onClick={handleCategoryClick}
             className={`px-3 py-2 cursor-pointer flex gap-2 items-center 
-            ${selectedCategory === item 
-                ? "bg-green-500 text-white rounded-md" 
+            ${selectedCategory === item
+                ? "bg-green-500 text-white rounded-md"
                 : ""}`}>
             <img className={'w-14 h-14 object-cover rounded-full'}
                  src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777125265/download_fbidot.jpg" alt=""/>

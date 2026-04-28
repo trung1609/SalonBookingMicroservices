@@ -1,6 +1,7 @@
 import React from 'react';
 import {FiberManualRecord} from "@mui/icons-material";
 import {Button} from "@mui/material";
+
 const ServiceCard = () => {
     return (
         <div className={'w-full'}>
@@ -17,7 +18,8 @@ const ServiceCard = () => {
                 <div className={'space-y-3'}>
                     <img
                         className={'w-32 h-32 object-cover rounded-md'}
-                        src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777197078/Homem_bonito_a_cortar_a_barba_num_barbeiro____Foto_Gr%C3%A1tis_zcfgr3.jpg" alt=""/>
+                        src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777197078/Homem_bonito_a_cortar_a_barba_num_barbeiro____Foto_Gr%C3%A1tis_zcfgr3.jpg"
+                        alt=""/>
                     <Button fullWidth variant={'outlined'}>Add</Button>
                 </div>
             </div>
