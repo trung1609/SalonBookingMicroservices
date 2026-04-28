@@ -8,7 +8,7 @@ const ReviewCard = () => {
         <div className={'flex justify-between'}>
             <div className={'w-[80%]'}>
                 <Grid container>
-                    <Grid size={1}>
+                    <Grid size={1.5}>
                         <Box>
                             <Avatar className={'text-white'} sx={{width: 56, height: 56, bgcolor: "#9155FD"}}>
                                 A
