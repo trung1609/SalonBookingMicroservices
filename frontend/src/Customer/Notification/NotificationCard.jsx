@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card} from "@mui/material";
 import {NotificationsActive} from "@mui/icons-material";
+
 const NotificationCard = () => {
     return (
         <Card
@@ -10,7 +11,7 @@ const NotificationCard = () => {
             <div>
                 <p>Your Booking Got Confirmed</p>
                 <h1 className={'space-x-3'}>
-                    {[1,1,1,1].map((item) => <span>Hair Cut</span>)}
+                    {[1, 1, 1, 1].map((item) => <span>Hair Cut</span>)}
                 </h1>
             </div>
         </Card>

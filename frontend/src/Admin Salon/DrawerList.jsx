@@ -7,7 +7,7 @@ const DrawerList = ({menu, menu2, toggleDrawer}) => {
     const location = useLocation();
     const handleClick = (item) => () => {
         navigate(item.path);
-        if (toggleDrawer){
+        if (toggleDrawer) {
             toggleDrawer(false)();
         }
     }

@@ -117,7 +117,8 @@ const CreateServiceForm = () => {
                                 name="category"
                                 onChange={formik.handleChange}
                             >
-                                {[1, 1, 1, 1].map((item, index) => <MenuItem value={"haircut"+ index}>Haircut</MenuItem>)}
+                                {[1, 1, 1, 1].map((item, index) => <MenuItem
+                                    value={"haircut" + index}>Haircut</MenuItem>)}
                             </Select>
                         </FormControl>
 

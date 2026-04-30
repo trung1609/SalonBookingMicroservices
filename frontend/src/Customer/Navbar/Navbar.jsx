@@ -35,7 +35,7 @@ const Navbar = () => {
                     </Badge>
                 </IconButton>
 
-                {true ? <div className={'flex gap-1 items-center'}>
+                {false ? <div className={'flex gap-1 items-center'}>
                         <h1 className={'text-lg font-semibold'}>Trung</h1>
                         <IconButton id="basic-button"
                                     aria-controls={open ? 'basic-menu' : undefined}
@@ -67,7 +67,7 @@ const Navbar = () => {
                         </Menu>
                     </div> :
 
-                    <IconButton>
+                    <IconButton onClick={() => navigate("/login")}>
                         <AccountCircle sx={{fontSize: "45px", color: "green"}}/>
                     </IconButton>}
             </div>

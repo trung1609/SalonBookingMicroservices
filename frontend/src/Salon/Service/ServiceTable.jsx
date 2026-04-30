@@ -60,7 +60,8 @@ export default function ServiceTable() {
                                     <div className={'flex gap-1 flex-wrap'}>
                                         <img
                                             className={'w-20 object-cover rounded-md'}
-                                            src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777452131/Top_Beauty_Services_in_Fairlakes_You_Must_Try_rskyww.jpg" alt=""/>
+                                            src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777452131/Top_Beauty_Services_in_Fairlakes_You_Must_Try_rskyww.jpg"
+                                            alt=""/>
                                     </div>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
