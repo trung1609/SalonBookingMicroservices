@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Avatar, Badge, Button, IconButton, Menu, MenuItem} from "@mui/material";
 import {AccountCircle, NotificationsActive} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {getUser, logout} from "../../Redux/Auth/action";
 
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const dispatch = useDispatch();
+    const {auth} = useSelector(store => store)
     const navigate = useNavigate();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -13,6 +17,15 @@ const Navbar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        handleClose();
+    }
+
+    useEffect(() => {
+        dispatch(getUser(localStorage.getItem("jwt")))
+    }, [auth.jwt]);
     return (
         <div className={'z-50 px-6 flex items-center justify-between py-2'}>
             <div className={'flex items-center gap-10'}>
@@ -35,15 +48,15 @@ const Navbar = () => {
                     </Badge>
                 </IconButton>
 
-                {false ? <div className={'flex gap-1 items-center'}>
-                        <h1 className={'text-lg font-semibold'}>Trung</h1>
+                {auth.user?.id ? <div className={'flex gap-1 items-center'}>
+                        <h1 className={'text-lg font-semibold'}>{auth.user?.fullName}</h1>
                         <IconButton id="basic-button"
                                     aria-controls={open ? 'basic-menu' : undefined}
                                     aria-haspopup="true"
                                     aria-expanded={open ? 'true' : undefined}
                                     onClick={handleClick}>
                             <Avatar sx={{bgcolor: "green"}}>
-                                T
+                                {auth.user?.fullName[0]}
                             </Avatar>
                         </IconButton>
                         <Menu
@@ -63,7 +76,7 @@ const Navbar = () => {
                             }}>
                                 My Bookings
                             </MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </div> :
 

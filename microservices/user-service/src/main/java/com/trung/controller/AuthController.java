@@ -20,6 +20,9 @@ public class AuthController {
     public ResponseEntity<AuthResponse> signup(
             @RequestBody SignupDTO request
     ) throws Exception {
+        if (request.getUsername() == null || request.getUsername().isEmpty()) {
+            request.setUsername(request.getEmail());
+        }
         AuthResponse authResponse = authService.signup(request);
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }

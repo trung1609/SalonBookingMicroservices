@@ -1,16 +1,28 @@
 import React from 'react';
-import {useLocation} from "react-router-dom";
-import LoginForm from "./LoginForm";
+import {useLocation, useNavigate} from "react-router-dom";
 import SignupForm from "./SignupForm";
+import {Button} from "@mui/material";
+import LoginForm from "./LoginForm";
 
 const Auth = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     return (
         <div className={'flex justify-center items-center h-[95vh]'}>
             <div className={'shadow-lg p-5'}>
                 {location.pathname === '/register'
-                    ? <div><SignupForm/></div>
-                    : <div><LoginForm/></div>}
+                    ? (<><SignupForm/>
+                        <div className={'text-center pt-5'}>
+                            Already Have Account ? <Button onClick={() => navigate("/login")}>Login</Button>
+                        </div>
+                    </>)
+                    : (<><
+                        LoginForm/>
+                        <div className={'text-center pt-5'}>
+                            Not Have Account ? <Button onClick={() => navigate("/register")}>Signup</Button>
+                        </div>
+                    </>)
+                }
             </div>
         </div>
     );

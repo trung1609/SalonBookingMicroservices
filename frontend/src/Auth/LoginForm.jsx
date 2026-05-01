@@ -1,8 +1,13 @@
 import React from 'react';
 import {Button, Container, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
+import {useDispatch} from "react-redux";
+import {loginUser} from "../Redux/Auth/action";
+import {useNavigate} from "react-router-dom";
 
 const LoginForm = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const formik = useFormik(
         {
             initialValues: {
@@ -11,6 +16,7 @@ const LoginForm = () => {
             },
             onSubmit: (values) => {
                 console.log("Submitting values: ", values)
+                dispatch(loginUser({data: values, navigate}))
             }
         }
     );

@@ -37,7 +37,7 @@ export const registerUser = (userData) => async (dispatch) => {
 export const loginUser = (userData) => async (dispatch) => {
     dispatch({type: LOGIN_REQUEST});
     try {
-        const response = await axios.post(
+        const response = await api.post(
             `${API_BASE_URL}/auth/login`,
             userData.data
         );

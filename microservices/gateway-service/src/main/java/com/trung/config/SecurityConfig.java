@@ -42,6 +42,7 @@ public class SecurityConfig {
         ).oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.
                 jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantAuthoritiesExtractor())));
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
+        http.cors(cors->cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
 

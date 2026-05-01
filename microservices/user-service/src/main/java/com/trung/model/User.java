@@ -26,7 +26,6 @@ public class User {
 
     private String fullName;
 
-    @NotBlank(message = "Username is required")
     private String username;
 
     @NotBlank(message = "Email is required")

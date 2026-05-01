@@ -2,12 +2,16 @@ import React, {useState} from 'react';
 import {Badge, Drawer, IconButton} from "@mui/material";
 import {Menu, NotificationsActive} from "@mui/icons-material";
 import DrawerList from "./DrawerList";
+import {useDispatch} from "react-redux";
 
 const Navbar = ({DrawerList}) => {
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     }
+
+
     return (
         <div className={'h-[10vh] flex items-center justify-between px-5 border-b'}>
             <div className={'flex items-center gap-3'}>
