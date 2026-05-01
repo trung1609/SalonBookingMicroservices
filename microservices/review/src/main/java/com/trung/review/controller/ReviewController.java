@@ -1,10 +1,8 @@
 package com.trung.review.controller;
 
+import com.trung.review.mapper.ReviewMapper;
 import com.trung.review.model.Review;
-import com.trung.review.payload.dto.ApiResponse;
-import com.trung.review.payload.dto.ReviewRequest;
-import com.trung.review.payload.dto.SalonDTO;
-import com.trung.review.payload.dto.UserDTO;
+import com.trung.review.payload.dto.*;
 import com.trung.review.service.ReviewService;
 import com.trung.review.service.client.SalonFeignClient;
 import com.trung.review.service.client.UserFeignClient;
@@ -34,12 +32,21 @@ public class ReviewController {
     }
 
     @GetMapping("/salon/{salonId}")
-    public ResponseEntity<List<Review>> getReviewsBySalonId(@PathVariable Long salonId,
-                                               @RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<List<ReviewDTO>> getReviewsBySalonId(@PathVariable Long salonId,
+                                                               @RequestHeader("Authorization") String jwt) throws Exception {
 
         SalonDTO salon = salonFeignClient.getSalonById(salonId).getBody();
-        List<Review> review = reviewService.getReviewsBySalonId(salon.getId());
-        return ResponseEntity.ok(review);
+        List<Review> reviews = reviewService.getReviewsBySalonId(salon.getId());
+        List<ReviewDTO> reviewDTOs = reviews.stream().map((review) -> {
+            UserDTO userDTO = null;
+            try {
+                userDTO = userFeignClient.getUserById(review.getUserId()).getBody();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return ReviewMapper.toDTO(review, userDTO, salon);
+        }).toList();
+        return ResponseEntity.ok(reviewDTOs);
     }
 
     @PutMapping("/salon/{salonId}")
