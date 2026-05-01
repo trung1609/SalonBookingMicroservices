@@ -56,7 +56,7 @@ export const updateSalon = ({salonId, salon, jwt}) => async (dispatch) => {
     }
 }
 
-export const fetchSalon = () => async (dispatch) => {
+export const fetchSalons = () => async (dispatch) => {
     dispatch({type: FETCH_SALONS_REQUEST})
 
     try {
@@ -65,7 +65,7 @@ export const fetchSalon = () => async (dispatch) => {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
         })
-
+        console.log("salons response ", response.data)
         dispatch({type: FETCH_SALONS_SUCCESS, payload: response.data})
     } catch (error) {
         dispatch({type: FETCH_SALONS_FAILURE, payload: error.message})
@@ -81,7 +81,7 @@ export const fetchSalonById = (salonId) => async (dispatch) => {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
         })
-
+        console.log("salon by id response ", response.data)
         dispatch({type: FETCH_SALON_BY_ID_SUCCESS, payload: response.data})
     } catch (error) {
         dispatch({type: FETCH_SALON_BY_ID_FAILURE, payload: error.message})

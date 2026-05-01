@@ -1,32 +1,48 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchSalonById} from "../../../Redux/Salon/action";
+import {getCategoriesBySalon} from "../../../Redux/Category/action";
 
 const SalonDetail = () => {
+    const {id} = useParams();
+    const dispatch = useDispatch();
+    const {salon} = useSelector(store => store);
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchSalonById(id));
+            dispatch(getCategoriesBySalon({
+                jwt: localStorage.getItem("jwt"),
+                salonId: id,
+            }))
+        }
+    }, [id]);
     return (
         <div className='space-y-5 mb-20'>
             <section className='grid grid-cols-2 gap-3'>
                 <div className='col-span-2'>
                     <img className='w-full rounded-md h-[15rem] object-cover'
-                         src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777193100/download_2_jjiwkk.jpg"
+                         src={salon.salon?.images[0]}
                          alt=''/>
                 </div>
 
                 <div className='col-span-1'>
                     <img className='w-full rounded-md h-[15rem] object-cover'
-                         src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777193168/Men_s_Hair_Salons__Everything_You_Need_to_Know_qnox2c.jpg"
+                         src={salon.salon?.images[1]}
                          alt=''/>
                 </div>
 
                 <div className='col-span-1'>
                     <img className='w-full rounded-md h-[15rem] object-cover'
-                         src="https://res.cloudinary.com/dq6f7y2tu/image/upload/v1777193230/download_3_a8p6un.jpg"
+                         src={salon.salon?.images[2]}
                          alt=''/>
                 </div>
             </section>
 
             <section className='space-y-3'>
-                <h1 className='text-3xl font-bold'>Trung Salon</h1>
-                <p>123 Main Street, City, State 12345</p>
-                <p><strong>Timing:</strong> 9:00 AM - 8:00 PM</p>
+                <h1 className='text-3xl font-bold'>{salon.salon?.name}</h1>
+                <p>{salon.salon?.address}</p>
+                <p><strong>Timing:</strong> {salon.salon?.openTime} - {salon.salon?.closeTime}</p>
             </section>
         </div>
     )

@@ -6,6 +6,7 @@ import categoryReducer from "./Category/reducer";
 import authReducer from "./Auth/reducer";
 import reviewReducer from "./Review/reducer";
 import notificationReducer from "./Notifications/reducer";
+import serviceOfferingReducer from "./Salon Services/reducer";
 
 const rootReducers = combineReducers({
     salon: salonReducer,
@@ -14,7 +15,7 @@ const rootReducers = combineReducers({
     auth: authReducer,
     review: reviewReducer,
     notification: notificationReducer,
-
+    service: serviceOfferingReducer
 })
 
 export const store = legacy_createStore(rootReducers, applyMiddleware(thunk))

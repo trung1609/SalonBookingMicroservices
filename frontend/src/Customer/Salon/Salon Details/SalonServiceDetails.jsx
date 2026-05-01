@@ -1,29 +1,43 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CategoryCard from "./CategoryCard";
 import ServiceCard from "./ServiceCard";
 import {Button, Divider} from "@mui/material";
 import {RemoveShoppingCart, ShoppingCart} from "@mui/icons-material";
 import SelectedServiceList from "./SelectedServiceList";
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchServicesBySalonId} from "../../../Redux/Salon Services/action";
 
 const SalonServiceDetails = () => {
-    const [selectedCategory, setSelectedCategory] = useState(0)
+    const [selectedCategory, setSelectedCategory] = useState(null)
     const handleCategoryClick = (category) => () => {
-        setSelectedCategory(category)
+        setSelectedCategory(category.id)
     }
+    const {id} = useParams();
+    const dispatch = useDispatch();
+    const {salon, service, category} = useSelector(store => store);
+
+    useEffect(() => {
+        dispatch(fetchServicesBySalonId({
+            salonId: id,
+            jwt: localStorage.getItem("jwt"),
+            categoryId: selectedCategory
+        }));
+    }, [id, selectedCategory]);
     return (
         <div className={'lg:flex gap-5 h-[90vh] mt-10'}>
             <section className={'space-y-5 border-r lg:w-[25%] pr-5'}>
-                {[1, 1, 1, 1, 1].map((item, index) => <CategoryCard
+                {category.categories.map((item, index) => <CategoryCard
                     selectedCategory={selectedCategory}
-                    item={index}
-                    handleCategoryClick={handleCategoryClick(index)}/>)}
+                    item={item}
+                    handleCategoryClick={handleCategoryClick(item)}/>)}
             </section>
 
             <section className={'space-y-2 lg:w-[50%] px-5 lg:px-20 overflow-y-auto'}>
 
-                {[1, 1, 1, 1, 1].map((item) =>
+                {service.services.map((item) =>
                     <div className={'space-y-4'}>
-                        <ServiceCard/>
+                        <ServiceCard item={item}/>
                         <Divider/>
                     </div>)}
             </section>
