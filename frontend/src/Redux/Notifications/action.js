@@ -28,6 +28,10 @@ export const fetchNotifications = () => async (dispatch) => {
 };
 
 export const fetchNotificationsByUser = ({userId, jwt}) => async (dispatch) => {
+    if (!userId) {
+        console.log("userId is undefined");
+        return;
+    }
     dispatch({type: FETCH_NOTIFICATIONS_BY_USER_REQUEST});
     try {
         const response = await api.get(`${API_URL}/user/${userId}`,

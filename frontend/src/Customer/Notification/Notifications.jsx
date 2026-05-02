@@ -1,7 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import NotificationCard from "./NotificationCard";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchNotifications, fetchNotificationsByUser} from "../../Redux/Notifications/action";
 
 const Notifications = () => {
+    const dispatch = useDispatch();
+    const {auth, notification} = useSelector(store => store);
+    useEffect(() => {
+        dispatch(fetchNotificationsByUser({
+            userId: auth.user?.id,
+            jwt: localStorage.getItem("jwt"),
+        }));
+    }, [dispatch, auth.user?.id]);
     return (
         <div className={'px-5 md:flex flex-col items-center mt-10 min-h-screen'}>
             <div>
@@ -9,7 +19,7 @@ const Notifications = () => {
             </div>
 
             <div className={'space-y-4 md:w-[35rem]'}>
-                <NotificationCard/>
+                {notification.notifications.map((item) =><NotificationCard item={item}/>)}
             </div>
         </div>
     );

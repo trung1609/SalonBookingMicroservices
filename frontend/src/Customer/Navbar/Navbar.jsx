@@ -8,7 +8,7 @@ import {getUser, logout} from "../../Redux/Auth/action";
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const dispatch = useDispatch();
-    const {auth} = useSelector(store => store)
+    const {auth, notification} = useSelector(store => store)
     const navigate = useNavigate();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -43,7 +43,7 @@ const Navbar = () => {
                 </Button>
 
                 <IconButton onClick={() => navigate("/notifications")}>
-                    <Badge badgeContent={5}>
+                    <Badge badgeContent={notification.unreadCount}>
                         <NotificationsActive color={'primary'}/>
                     </Badge>
                 </IconButton>

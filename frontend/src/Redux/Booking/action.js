@@ -36,8 +36,8 @@ export const createBooking = ({jwt, salonId, bookingData}) => async (dispatch) =
                 params: {salonId, paymentMethod: "RAZORPAY"},
             }
         );
-        window.location.href = data.payment_link_url
         console.log(" create booking ", data)
+        window.location.href = data.paymentLinkUrl
         dispatch({type: CREATE_BOOKING_SUCCESS, payload: data});
     } catch (error) {
         console.log("error creating booking ", error)

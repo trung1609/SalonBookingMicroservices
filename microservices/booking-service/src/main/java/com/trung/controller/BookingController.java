@@ -50,7 +50,7 @@ public class BookingController {
         Booking booking = bookingService.createBooking(request, userDTO, salonDTO, serviceDTOSet);
 
         PaymentLinkResponse response = paymentFeignClient.createPaymentLink(
-                BookingMapper.toDTO(booking),
+                BookingMapper.toDTO(booking, serviceDTOSet, userDTO, salonDTO),
                 paymentMethod,
                 jwt).getBody();
         return ResponseEntity.ok(response);
@@ -88,21 +88,38 @@ public class BookingController {
 
     private Set<BookingDTO> getBookingDTOs(List<Booking> bookings) {
         return bookings.stream()
-                .map(BookingMapper::toDTO)
+                .map(booking -> {
+                    Set<ServiceDTO> serviceDTO = serviceOfferingFeignClient.getServicesByIds(booking.getServiceIds()).getBody();
+                    UserDTO userDTO = null;
+                    SalonDTO salonDTO = null;
+                    try {
+                        salonDTO = salonFeignClient.getSalonById(booking.getSalonId()).getBody();
+                        userDTO = userFeignClient.getUserById(booking.getCustomerId()).getBody();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    return BookingMapper.toDTO(booking, serviceDTO, userDTO, salonDTO);
+                })
                 .collect(Collectors.toSet());
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<BookingDTO> getBookingById(@PathVariable Long bookingId) throws Exception {
         Booking booking = bookingService.getBookingById(bookingId);
-        return ResponseEntity.ok(BookingMapper.toDTO(booking));
+        Set<ServiceDTO> serviceDTO = serviceOfferingFeignClient.getServicesByIds(booking.getServiceIds()).getBody();
+        UserDTO customer = userFeignClient.getUserById(booking.getCustomerId()).getBody();
+        SalonDTO salonDTO = salonFeignClient.getSalonById(booking.getSalonId()).getBody();
+        return ResponseEntity.ok(BookingMapper.toDTO(booking, serviceDTO, customer, salonDTO));
     }
 
     @PutMapping("/{bookingId}/status")
     public ResponseEntity<BookingDTO> updateBookingStatus(@PathVariable Long bookingId,
                                                           @RequestParam BookingStatus status) throws Exception {
         Booking booking = bookingService.updateBooking(bookingId, status);
-        return ResponseEntity.ok(BookingMapper.toDTO(booking));
+        Set<ServiceDTO> serviceDTO = serviceOfferingFeignClient.getServicesByIds(booking.getServiceIds()).getBody();
+        UserDTO customer = userFeignClient.getUserById(booking.getCustomerId()).getBody();
+        SalonDTO salonDTO = salonFeignClient.getSalonById(booking.getSalonId()).getBody();
+        return ResponseEntity.ok(BookingMapper.toDTO(booking, serviceDTO, customer, salonDTO));
     }
 
     @GetMapping("/slots/salon/{salonId}/date")

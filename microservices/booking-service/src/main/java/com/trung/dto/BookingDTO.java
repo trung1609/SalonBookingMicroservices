@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -27,4 +28,7 @@ public class BookingDTO {
 
     private BookingStatus status = BookingStatus.PENDING;
     private Integer totalPrice;
+    private Set<ServiceDTO> services;
+    private UserDTO user;
+    private SalonDTO salon;
 }
