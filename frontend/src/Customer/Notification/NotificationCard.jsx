@@ -24,7 +24,7 @@ const NotificationCard = ({item}) => {
             <div>
                 <p>{item.description}</p>
                 <h1 className={'space-x-3'}>
-                    {[1, 1, 1, 1].map((item) => <span>Hair Cut</span>)}
+                    Salon Id: {item.salonId}
                 </h1>
             </div>
         </Card>
